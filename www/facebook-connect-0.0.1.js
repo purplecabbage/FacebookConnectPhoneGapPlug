@@ -1,56 +1,38 @@
-
-
-//function FacebookConnectPlugin() { }
-
-
-
-
-FacebookGap = 
-{
+var Facebook = {
 	appId:null,
 	accessToken:null,
 	expiresIn:null,
-	
-	// login event methods, supply your own handlers
 	onFBLogin:null,
 	onDidNotLogin:null,
 	onFBLogout:null,	
 	
-	
-	initWithAppId:function(appId)
-	{
+	initWithAppId:function(appId) {
 		this.appId = appId;
 		PhoneGap.exec("FacebookConnectPlugin.initWithAppId",appId);
 	},
 	
 	// array of permission strings: ex. 'email','feed',...
 	// for details see: http://developers.facebook.com/docs/authentication/permissions/ 
-	authorize:function() 
-	{
+	authorize:function() {
 		var args = Array.prototype.slice.apply(arguments,[0]);
 		args.unshift("FacebookConnectPlugin.authorize");
 		PhoneGap.exec.apply(null,args);
 	},
 	
-	showFeedPublishDialog:function()
-	{
+	showFeedPublishDialog:function(){
 		PhoneGap.exec("FacebookConnectPlugin.showFeedPublishDialog");
 	},
 	
-	logout:function()
-	{
+	logout:function(){
 		PhoneGap.exec("FacebookConnectPlugin.logout");
 	},
 	
 	// TODO: implement limit | offset | until | since
-	getGraphRequest:function(path,postData)
-	{
+	getGraphRequest:function(path,postData) {
 		var postDataStr;
-		if(postData)
-		{
+		if(postData){
 			var arr = [];
-			for(var s in postData)
-			{
+			for(var s in postData){
 				postData.push(s + "=" + encodeURIComponent(postData[s]));
 			}
 			postDataStr = arr.join("&");
@@ -63,35 +45,28 @@ FacebookGap =
 		return req;
 	},
 	
-	getMyInfo:function()
-	{
+	getMyInfo:function(){
 		return this.getGraphRequest("me");
 	},
 	
-	getMyNewsFeed:function()
-	{
+	getMyNewsFeed:function(){
 		return this.getGraphRequest("me/home");
 	},
 	
-	getUserInfo:function(userId)
-	{
+	getUserInfo:function(userId){
 		return this.getGraphRequest(userId);
 	},
 	
-	getFriends:function()
-	{
+	getFriends:function(){
 		console.log("appid = " + this.appId);
 		return this.getGraphRequest("me/friends");
 	},
 	
-	handleOpenUrl:function(url)
-	{
-		var paramsToObject = function(params)
-		{
+	handleOpenUrl:function(url){
+		var paramsToObject = function(params){
 			var parts = params.split("&");
 			var result = {};
-			for(var n=0; n < parts.length; n++)
-			{
+			for(var n=0; n < parts.length; n++){
 				var arg = parts[n].split("=");
 				result[arg[0]] = arg[1].split("+").join(" ");
 			}
@@ -101,27 +76,16 @@ FacebookGap =
 		var decodedURL = decodeURI(url);
 
 		var params = decodedURL.split("#")[1];
-		if(params)
-		{		
-			
+		if(params){		
 			var result = paramsToObject(params);
 			this.accessToken = result.access_token;
 			this.expiresIn = result.expires_in;
-			
-			//alert(result.access_token);
-			
 			PhoneGap.exec("FacebookConnectPlugin.handleOpenUrl",url);
-		}
-		else
-		{	
+		} else {	
 			PhoneGap.exec("FacebookConnectPlugin.handleOpenUrl",url);
 			params = decodedURL.split("?")[1];
 			this.lastError = paramsToObject(params);
 			this.onDidNotLogin(this.lastError);
-			
 		}
 	}
-	
 };
-
-
