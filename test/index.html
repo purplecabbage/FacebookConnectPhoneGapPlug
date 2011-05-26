@@ -2,11 +2,15 @@
 <html>
 <head>
 	<meta charset="UTF-8" />
-	<title>QUnit Test Suite</title>
-	<link rel="stylesheet" href="../qunit/qunit.css" type="text/css" media="screen">
-	<script type="text/javascript" src="../qunit/qunit.js"></script>
-	<script type="text/javascript" src="test.js"></script>
-	<script type="text/javascript" src="same.js"></script>
+	<title>Facebook Tests</title>
+	<link rel="stylesheet" href="qunit.css" type="text/css" media="screen">
+	<script src="qunit.js"></script>
+    <script>
+        test("module without setup/teardown (default)", function() {
+            expect(1);
+            ok(true);
+        });
+    </script>
 </head>
 <body>
 	<h1 id="qunit-header">QUnit Test Suite</h1>
