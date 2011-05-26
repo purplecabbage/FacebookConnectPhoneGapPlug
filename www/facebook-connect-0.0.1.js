@@ -1,4 +1,5 @@
-var Facebook = {
+// FIXME we shouldn't clobber any existing FB global...
+var FB = {
 	appId:null,
 	accessToken:null,
 	expiresIn:null,
